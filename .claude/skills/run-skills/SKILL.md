@@ -1,9 +1,9 @@
 ---
 name: run-skills
-description: Validate, list, search, and graph skills in the y2 data-ontology skills repo. Use when asked to add a skill, validate skill definitions, list available skills, search for a skill, show the skill dependency graph, or check whether a SKILL.md is well-formed.
+description: Validate, list, search, graph, and command-index skills in the y2 data-ontology skills repo. Use when asked to add a skill, validate skill definitions, list available skills, search ontology commands, show the skill dependency graph, or check whether a SKILL.md is well-formed.
 ---
 
-This is a standalone data-ontology skills repo modeled on Palantir Foundry ontology primitives (object types, link types, action types, interfaces). "Running" it means validating skill definitions against the schema and browsing the catalog. The driver is `.claude/skills/run-skills/driver.mjs` — zero external dependencies, Node.js only.
+This is a standalone data-ontology skills repo modeled on Palantir Foundry ontology primitives (object types, link types, action types, interfaces). "Running" it means validating skill definitions against the schema, browsing the catalog, and indexing ontology commands for data engineers. The driver is `.claude/skills/run-skills/driver.mjs` — zero external dependencies, Node.js only.
 
 All paths below are relative to the repo root.
 
@@ -28,6 +28,9 @@ schemas/
 .claude/skills/run-skills/
   driver.mjs              ← catalog and validation tool
   SKILL.md                ← this file
+.agents/skills/run-skills/
+  driver.mjs              ← wrapper around the canonical driver
+  SKILL.md                ← .agents-compatible entrypoint
 ```
 
 ## Run (agent path)
@@ -38,9 +41,15 @@ All commands run from the repo root.
 
 ```bash
 node .claude/skills/run-skills/driver.mjs validate
-# → "  OK    ⚡ generate-newsletter"  (one line per skill, typed)
-# → "3 passed, 0 failed."
+# → "  OK    ⚡ fuse-siloed-data"  (one line per skill, typed)
+# → all-pass summary
 # exit 0 on all-pass, exit 1 if any fail
+```
+
+`.agents` entrypoint:
+
+```bash
+node .agents/skills/run-skills/driver.mjs validate
 ```
 
 ### List catalog (grouped by ontological type)
@@ -53,14 +62,27 @@ node .claude/skills/run-skills/driver.mjs list
 ### Search
 
 ```bash
-node .claude/skills/run-skills/driver.mjs search "newsletter"
+node .claude/skills/run-skills/driver.mjs search "identity"
 # → matching skills with type icon, description, tags, platforms
+```
+
+### Show ontology command index
+
+```bash
+node .claude/skills/run-skills/driver.mjs commands
+# → command aliases mapped to the skill that implements each workflow
+```
+
+`.agents` entrypoint:
+
+```bash
+node .agents/skills/run-skills/driver.mjs commands
 ```
 
 ### Inspect a single skill
 
 ```bash
-node .claude/skills/run-skills/driver.mjs check generate-newsletter
+node .claude/skills/run-skills/driver.mjs check fuse-siloed-data
 # → parsed frontmatter JSON + "Valid." or error list
 ```
 
@@ -68,9 +90,9 @@ node .claude/skills/run-skills/driver.mjs check generate-newsletter
 
 ```bash
 node .claude/skills/run-skills/driver.mjs graph
-# → "  generate-newsletter"
-# →   "──[implements]──▶ runnable"
-# →   "──[runs-on]──▶ hello-world"
+# → "  fuse-siloed-data"
+# →   "──[uses-workflow]──▶ ontology-workflow"
+# →   "──[records-decisions-as]──▶ ontology-design-decision"
 ```
 
 ## Palantir Ontology Model
@@ -79,9 +101,9 @@ Skills are modeled on four Palantir Foundry primitives:
 
 | `type` | Icon | Palantir equivalent | When to use |
 |---|---|---|---|
-| `action` | ⚡ | Action Type | A business operation: generate, send, deploy, migrate |
-| `object` | ◉ | Object Type | A domain entity: campaign, subscriber, report |
-| `interface` | ◈ | Interface | A shared capability contract: `runnable`, `schedulable` |
+| `action` | ⚡ | Action Type | A business operation: design, fuse, review, extend |
+| `object` | ◉ | Object Type | A domain entity or durable decision record |
+| `interface` | ◈ | Interface | A shared capability contract: `ontology-workflow` |
 | `skill` | ◆ | — | General-purpose agent capability (default) |
 
 ### Required frontmatter (all types)
@@ -98,21 +120,21 @@ type: action                 # action | object | interface | skill
 
 ```yaml
 parameters:
-  - name: topic
+  - name: targetEntity
     baseType: string         # string | integer | float | boolean | date | timestamp | object-reference | array | struct
     description: What this param means.
     required: true
 modifies:
-  - newsletter-campaign      # object slugs or system names affected
+  - ontology-object-types    # object slugs or system names affected
 ```
 
 ### Object type — additional fields
 
 ```yaml
 properties:
-  - name: sentAt
-    baseType: timestamp
-    description: When the campaign was delivered.
+  - name: decisionId
+    baseType: string
+    description: Stable identifier for the ontology decision.
     primaryKey: false
 ```
 
@@ -120,9 +142,9 @@ properties:
 
 ```yaml
 sharedCapabilities:
-  - launch
-  - stop
-  - health-check
+  - gather-domain-language
+  - identify-real-world-entities
+  - document-tradeoffs
 extends:                     # other interface slugs
   - base-interface
 ```
@@ -131,20 +153,33 @@ extends:                     # other interface slugs
 
 ```yaml
 links:
-  - forwardName: runs-on     # "generate-newsletter runs-on → hello-world"
-    reverseName: hosts        # "hello-world hosts ← generate-newsletter"
-    target: hello-world
+  - forwardName: validates-with
+    reverseName: reviews
+    target: review-ontology-antipatterns
     cardinality: many-to-many  # one-to-one | one-to-many | many-to-many
 implements:
-  - runnable                 # interface slugs this skill conforms to
+  - ontology-workflow        # interface slugs this skill conforms to
+```
+
+### Command index entries
+
+Use `commands` to expose importable, searchable workflows for data engineers.
+
+```yaml
+commands:
+  - name: design-ontology
+    description: Build a domain-driven ontology from source data and business use cases.
+    examples: "design ontology from CRM and ERP data; ontologize this dataset"
 ```
 
 ## Design principles (from Palantir docs)
 
-- **Domain-driven, not source-driven** — name skills after real business operations, not system internals (`generate-newsletter`, not `call-agno-api`).
+- **Domain-driven, not source-driven** — name skills after real ontology/data-engineering work, not source-system internals (`fuse-siloed-data`, not `join-salesforce-table`).
 - **Self-documenting names** — if someone needs docs to understand the name, rename it.
 - **No action sprawl** — bundle related changes into one action skill, not one per field.
 - **Interfaces over duplication** — when three skills share a lifecycle, extract an interface.
+- **Fuse silos into shared object types** — prefer one real-world entity model with source precedence and provenance over one object type per system.
+- **Open for extension** — protect core models and add new capabilities through linked extension types, interfaces, and documented namespaces.
 - **`name` must match directory slug** — `skills/my-skill/SKILL.md` must have `name: my-skill`.
 
 ## Gotchas

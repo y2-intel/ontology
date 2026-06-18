@@ -12,6 +12,7 @@
  *   search <query>    Find skills by name, description, tags, or type
  *   check <slug>      Validate a single skill by slug and show parsed data
  *   graph             Print dependency graph (links between skills)
+ *   commands          Print the ontology command index declared by skills
  */
 
 import { readFileSync, readdirSync, statSync } from "fs";
@@ -159,6 +160,19 @@ function validate(fm, slug) {
   if (fm.version && !VER_RE.test(fm.version))
     errors.push(`version must be x.y.z semver (got "${fm.version}")`);
 
+  if (fm.commands) {
+    const commands = asArray(fm.commands);
+    for (const c of commands) {
+      if (!c.name) errors.push(`command missing "name"`);
+      else if (!NAME_RE.test(c.name)) errors.push(`command name "${c.name}" is not kebab-case`);
+      if (!c.description) errors.push(`command "${c.name ?? "?"}": missing "description"`);
+      else if (typeof c.description === "string" && c.description.length < 10)
+        errors.push(`command "${c.name ?? "?"}": description too short`);
+      if (c.examples != null && typeof c.examples !== "string")
+        errors.push(`command "${c.name ?? "?"}": examples must be a string`);
+    }
+  }
+
   // action-type checks
   if (fm.type === "action" && fm.parameters) {
     const params = asArray(fm.parameters);
@@ -206,6 +220,10 @@ function validate(fm, slug) {
 function asArray(v) {
   if (!v) return [];
   return Array.isArray(v) ? v : [v];
+}
+
+function commandEntries(fm) {
+  return asArray(fm.commands).filter(c => c && c.name);
 }
 
 // ── File discovery ───────────────────────────────────────────────────────────
@@ -295,6 +313,7 @@ function cmdSearch(skillsDir, query) {
     const haystack = [
       fm.name, fm.description, fm.type,
       ...asArray(fm.tags), ...asArray(fm.platforms),
+      ...commandEntries(fm).flatMap(c => [c.name, c.description, c.examples]),
     ].filter(Boolean).join(" ").toLowerCase();
     if (haystack.includes(q)) hits.push({ fm, s });
   }
@@ -305,6 +324,8 @@ function cmdSearch(skillsDir, query) {
     console.log(`    ${fm.description ?? "(no description)"}`);
     if (fm.tags?.length) console.log(`    tags: ${asArray(fm.tags).join(", ")}`);
     if (fm.platforms?.length) console.log(`    platforms: ${asArray(fm.platforms).join(", ")}`);
+    const commands = commandEntries(fm);
+    if (commands.length) console.log(`    commands: ${commands.map(c => c.name).join(", ")}`);
   }
   return 0;
 }
@@ -348,6 +369,38 @@ function cmdGraph(skillsDir) {
   return 0;
 }
 
+function cmdCommands(skillsDir) {
+  const skills = findSkills(skillsDir);
+  const rows = [];
+  for (const s of skills) {
+    const text = readFileSync(s.path, "utf8");
+    const fm = parseFrontmatter(text);
+    for (const c of commandEntries(fm)) {
+      rows.push({
+        command: c.name,
+        skill: fm.name || s.slug,
+        type: fm.type ?? "skill",
+        description: c.description,
+        examples: c.examples,
+      });
+    }
+  }
+
+  if (!rows.length) {
+    console.log("No ontology commands found.");
+    return 0;
+  }
+
+  rows.sort((a, b) => a.command.localeCompare(b.command));
+  console.log("Ontology command index:\n");
+  for (const row of rows) {
+    console.log(`  ${row.command.padEnd(30)} -> ${row.skill} [${row.type}]`);
+    console.log(`    ${row.description}`);
+    if (row.examples) console.log(`    examples: ${row.examples}`);
+  }
+  return 0;
+}
+
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 const skillsDir = join(REPO_ROOT, "skills");
@@ -360,9 +413,10 @@ const exitCode = (() => {
     case "search":   return cmdSearch(skillsDir, rest[0]);
     case "check":    return cmdCheck(skillsDir, rest[0]);
     case "graph":    return cmdGraph(skillsDir);
+    case "commands": return cmdCommands(skillsDir);
     default:
       console.error(`Unknown command: ${cmd}`);
-      console.error("Commands: validate | list | search <q> | check <slug> | graph");
+      console.error("Commands: validate | list | search <q> | check <slug> | graph | commands");
       return 1;
   }
 })();

@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://y2.dev/schemas/skill.schema.json",
   "title": "Skill",
-  "description": "Schema for a y2 agent skill definition modeled on Palantir Foundry ontology primitives.",
+  "description": "Schema for a y2 agent skill definition modeled on Palantir Foundry ontology primitives and indexed ontology commands.",
   "type": "object",
   "required": ["name", "description", "type"],
   "properties": {
@@ -119,6 +119,31 @@
       "type": "boolean",
       "default": false,
       "description": "Mark true for technical/infrastructure skills with no direct domain value. Palantir 'hidden' object type equivalent."
+    },
+    "commands": {
+      "type": "array",
+      "description": "Searchable command aliases exposed by this skill for data engineers and ontology builders.",
+      "items": {
+        "type": "object",
+        "required": ["name", "description"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "description": "Kebab-case command name, e.g. design-ontology or review-anti-patterns."
+          },
+          "description": {
+            "type": "string",
+            "minLength": 10,
+            "description": "What this command helps an agent or data engineer do."
+          },
+          "examples": {
+            "type": "string",
+            "description": "Semicolon-separated natural language triggers or command examples."
+          }
+        },
+        "additionalProperties": false
+      }
     }
   },
   "additionalProperties": false,
