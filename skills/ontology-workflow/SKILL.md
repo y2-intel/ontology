@@ -1,30 +1,6 @@
 ---
 name: ontology-workflow
-description: Interface contract for skills that help data engineers design, fuse, review, and extend open-world ontologies using data-oriented design.
-type: interface
-platforms:
-  - claude-code
-  - codex
-  - any
-tags:
-  - ontology
-  - interface
-  - data-engineering
-  - data-oriented-design
-  - palantir-inspired
-version: 1.0.0
-sharedCapabilities:
-  - gather-domain-language
-  - identify-real-world-entities
-  - define-identities-and-links
-  - map-source-data
-  - choose-pipelines-actions-functions
-  - document-tradeoffs
-  - validate-security-boundaries
-commands:
-  - name: ontology-workflow
-    description: Apply the shared workflow contract for ontology design, review, fusion, or extension skills.
-    examples: "make this ontology skill conform to the workflow; create an ontology workflow skill"
+description: Use this skill as the shared workflow contract for ontology design, data fusion, anti-pattern review, extension planning, and decision documentation.
 ---
 
 This interface defines the reusable contract for data-engineering skills that improve ontologies. Treat an ontology as a production data product: real-world entities, stable identities, meaningful links, curated properties, clear source precedence, and operational actions.

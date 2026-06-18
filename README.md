@@ -7,7 +7,7 @@ Use this pack to model real-world objects, fuse siloed source systems, resolve i
 ## Install
 
 ```bash
-npx skills add ontology
+npx skills add y2-intel/ontology
 ```
 
 Restart your agent after install so the new skills are discovered.
@@ -19,7 +19,7 @@ You do not need to clone this repo or run a local validator. Once installed, use
 Claude Code:
 
 ```text
-/ontology show available ontology prompt intents
+/ontology show available ontology workflows
 ```
 
 ```text
@@ -29,7 +29,7 @@ Claude Code:
 Codex:
 
 ```text
-@ontology show available ontology prompt intents
+@ontology show available ontology workflows
 ```
 
 ```text
@@ -44,7 +44,7 @@ Codex:
 | `fuse-siloed-data` | action | Unifying customers, employees, assets, vendors, facilities, or other entities across systems. |
 | `review-ontology-antipatterns` | action | Finding system silos, kitchen-sink fields, god objects, action sprawl, weak naming, or migration risks. |
 | `extend-open-ontology` | action | Adding capabilities without destabilizing core models, permissions, or downstream workflows. |
-| `ontology-command-index` | skill | Discovering this pack's prompt surface or routing a task to the right ontology workflow. |
+| `ontology` | skill | Discovering this pack's prompt surface or routing a task to the right ontology workflow. |
 | `ontology-design-decision` | object | Recording identity, denormalization, object-backed link, extension point, or source-of-truth decisions. |
 | `ontology-workflow` | interface | Keeping ontology design, fusion, review, and extension skills aligned to the shared workflow contract. |
 
@@ -64,17 +64,12 @@ Use `/ontology` in Claude Code or `@ontology` in Codex with requests like:
 /ontology record the design decision for why HR is authoritative for employee job title
 ```
 
-## Available Prompt Intents
+## What It Covers
 
-- `choose-ontology-skill`
-- `design-extension-point`
-- `design-ontology`
-- `extend-ontology`
-- `find-antipatterns`
-- `fuse-silos`
-- `model-domain-entities`
-- `ontology-commands`
-- `ontology-workflow`
-- `record-ontology-decision`
-- `resolve-identity`
-- `review-ontology`
+- Choose the right ontology workflow for a request.
+- Design a new ontology from domain language, source data, and workflows.
+- Model source rows as real-world entities, events, observations, links, and interfaces.
+- Fuse siloed source systems into shared ontology objects with identity resolution.
+- Review ontology artifacts for anti-patterns and migration-safe fixes.
+- Extend core models without creating god objects or breaking consumers.
+- Record ontology decisions, tradeoffs, source precedence, and security impacts.
