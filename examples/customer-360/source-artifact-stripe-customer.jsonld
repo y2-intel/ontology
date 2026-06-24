@@ -1,0 +1,9 @@
+{
+  "@context": "urn:openontology:context:core:0.0.1",
+  "@id": "urn:src:stripe:Customer",
+  "@type": "oo:SourceArtifact",
+  "oo.source.system": "stripe",
+  "oo.source.artifact.type": "api_object",
+  "oo.source.artifact.name": "Customer",
+  "oo.source.artifact.path": "stripe.Customer"
+}

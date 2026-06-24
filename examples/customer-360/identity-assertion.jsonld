@@ -1,0 +1,33 @@
+{
+  "@context": "urn:openontology:context:core:0.0.1",
+  "@id": "urn:oo:identity:sf001-stripecus123:v1",
+  "@type": "oo:IdentityAssertion",
+  "openontology_version": "0.0.1",
+  "identity": {
+    "kind": "candidate_same_as",
+    "subject": "urn:record:salesforce:Account:001xx000003DGbY",
+    "object": "urn:record:stripe:Customer:cus_123",
+    "method": "email_domain+billing_address+manual_review_pending",
+    "scope": {
+      "domain": "customer_360"
+    },
+    "confidence": {
+      "score": 0.81,
+      "method": "identity_model_v0",
+      "calibrated": false
+    }
+  },
+  "evidence": [
+    {
+      "kind": "data_profile",
+      "summary": "Billing address and email domain match; legal name differs slightly. Values redacted.",
+      "produced_at": "2026-06-23T00:00:00Z",
+      "produced_by": "urn:tool:entity-resolution-profiler"
+    }
+  ],
+  "provenance": {
+    "activity": "identity_candidate_generation",
+    "generated_at": "2026-06-23T00:00:00Z",
+    "generated_by": "urn:agent:identity-resolver"
+  }
+}

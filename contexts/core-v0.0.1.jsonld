@@ -1,0 +1,130 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "oo": "urn:openontology:ns:core:",
+    "prov": "http://www.w3.org/ns/prov#",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "id": "@id",
+    "type": "@type",
+    "OntologyFabric": "oo:OntologyFabric",
+    "Namespace": "oo:Namespace",
+    "SourceArtifact": "oo:SourceArtifact",
+    "OntologyTerm": "oo:OntologyTerm",
+    "SemanticAssertion": "oo:SemanticAssertion",
+    "MappingAssertion": "oo:MappingAssertion",
+    "IdentityAssertion": "oo:IdentityAssertion",
+    "EvidenceRecord": "oo:EvidenceRecord",
+    "ProvenanceRecord": "oo:ProvenanceRecord",
+    "UnknownState": "oo:UnknownState",
+    "SemanticDecision": "oo:SemanticDecision",
+    "openontology_version": "oo:openontologyVersion",
+    "created_at": {
+      "@id": "oo:createdAt",
+      "@type": "xsd:dateTime"
+    },
+    "updated_at": {
+      "@id": "oo:updatedAt",
+      "@type": "xsd:dateTime"
+    },
+    "assertion": "oo:assertion",
+    "identity": "oo:identity",
+    "kind": "oo:kind",
+    "status": "oo:status",
+    "subject": {
+      "@id": "oo:subject",
+      "@type": "@id"
+    },
+    "object": {
+      "@id": "oo:object",
+      "@type": "@id"
+    },
+    "scope": "oo:scope",
+    "domain": "oo:domain",
+    "confidence": "oo:confidence",
+    "score": {
+      "@id": "oo:score",
+      "@type": "xsd:decimal"
+    },
+    "method": "oo:method",
+    "calibrated": {
+      "@id": "oo:calibrated",
+      "@type": "xsd:boolean"
+    },
+    "confidence_contribution": {
+      "@id": "oo:confidenceContribution",
+      "@type": "xsd:decimal"
+    },
+    "evidence": "oo:evidence",
+    "summary": "schema:description",
+    "produced_at": {
+      "@id": "oo:producedAt",
+      "@type": "xsd:dateTime"
+    },
+    "produced_by": {
+      "@id": "oo:producedBy",
+      "@type": "@id"
+    },
+    "provenance": "oo:provenance",
+    "activity": "oo:activity",
+    "generated_at": {
+      "@id": "prov:generatedAtTime",
+      "@type": "xsd:dateTime"
+    },
+    "generated_by": {
+      "@id": "prov:wasAssociatedWith",
+      "@type": "@id"
+    },
+    "used": {
+      "@id": "prov:used",
+      "@type": "@id"
+    },
+    "oo.source.system": "oo:sourceSystem",
+    "oo.source.artifact.type": "oo:sourceArtifactType",
+    "oo.source.artifact.name": "oo:sourceArtifactName",
+    "oo.source.artifact.path": "oo:sourceArtifactPath",
+    "oo.source.owner": "oo:sourceOwner",
+    "oo.source.environment": "oo:sourceEnvironment",
+    "oo.source.version": "oo:sourceVersion",
+    "oo.source.extracted_at": {
+      "@id": "oo:sourceExtractedAt",
+      "@type": "xsd:dateTime"
+    },
+    "oo.source.native_type": "oo:sourceNativeType",
+    "oo.source.sample_values_redacted": "oo:sourceSampleValuesRedacted",
+    "oo.source.constraints": "oo:sourceConstraints",
+    "oo.source.lineage_ref": {
+      "@id": "oo:sourceLineageRef",
+      "@type": "@id"
+    },
+    "oo.term.kind": "oo:termKind",
+    "oo.term.label": "oo:termLabel",
+    "oo.term.definition": "oo:termDefinition",
+    "oo.term.status": "oo:termStatus",
+    "oo.term.namespace": "oo:termNamespace",
+    "oo.term.aliases": "oo:termAliases",
+    "oo.term.examples": "oo:termExamples",
+    "oo.term.related_terms": "oo:termRelatedTerms",
+    "oo.term.parent_terms": "oo:termParentTerms",
+    "oo.term.replaced_by": {
+      "@id": "oo:termReplacedBy",
+      "@type": "@id"
+    },
+    "oo.term.security_classification": "oo:termSecurityClassification",
+    "oo.term.domain_owner": "oo:termDomainOwner",
+    "source_artifact": {
+      "@id": "oo:sourceArtifact",
+      "@type": "@id"
+    },
+    "ontology_term": {
+      "@id": "oo:ontologyTerm",
+      "@type": "@id"
+    },
+    "unknown_state": "oo:unknownState",
+    "semantic_decision": {
+      "@id": "oo:semanticDecision",
+      "@type": "@id"
+    }
+  }
+}

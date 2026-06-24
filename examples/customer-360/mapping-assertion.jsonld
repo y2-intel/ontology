@@ -1,0 +1,35 @@
+{
+  "@context": [
+    "urn:openontology:context:core:0.0.1"
+  ],
+  "@id": "urn:oo:mapping:salesforce-account-to-customer-account:v1",
+  "@type": "oo:MappingAssertion",
+  "openontology_version": "0.0.1",
+  "assertion": {
+    "kind": "broad_match",
+    "status": "proposed",
+    "subject": "urn:src:salesforce:Account",
+    "object": "urn:openontology:core:CustomerAccount",
+    "scope": {
+      "domain": "customer_360"
+    },
+    "confidence": {
+      "score": 0.72,
+      "method": "source_label+steward_review",
+      "calibrated": false
+    }
+  },
+  "evidence": [
+    {
+      "kind": "human_review",
+      "summary": "Domain steward confirmed Salesforce Account includes customers and prospects; broad match selected instead of exact match.",
+      "produced_at": "2026-06-23T00:00:00Z",
+      "produced_by": "urn:person:domain-steward"
+    }
+  ],
+  "provenance": {
+    "activity": "mapping_review",
+    "generated_at": "2026-06-23T00:00:00Z",
+    "generated_by": "urn:person:domain-steward"
+  }
+}

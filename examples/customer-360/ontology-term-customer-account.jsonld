@@ -1,0 +1,9 @@
+{
+  "@context": "urn:openontology:context:core:0.0.1",
+  "@id": "urn:openontology:core:CustomerAccount",
+  "@type": "oo:OntologyTerm",
+  "oo.term.kind": "class",
+  "oo.term.label": "Customer Account",
+  "oo.term.definition": "A party account representing an ongoing commercial relationship with the organization.",
+  "oo.term.status": "experimental"
+}

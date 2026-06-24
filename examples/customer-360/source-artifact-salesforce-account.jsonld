@@ -1,0 +1,9 @@
+{
+  "@context": "urn:openontology:context:core:0.0.1",
+  "@id": "urn:src:salesforce:Account",
+  "@type": "oo:SourceArtifact",
+  "oo.source.system": "salesforce",
+  "oo.source.artifact.type": "table",
+  "oo.source.artifact.name": "Account",
+  "oo.source.artifact.path": "salesforce.public.Account"
+}

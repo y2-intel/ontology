@@ -1,0 +1,514 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:openontology:schema:core:0.0.1",
+  "title": "OpenOntology Core Artifact",
+  "type": "object",
+  "required": [
+    "@context",
+    "@id",
+    "@type"
+  ],
+  "oneOf": [
+    {
+      "$ref": "#/$defs/sourceArtifact"
+    },
+    {
+      "$ref": "#/$defs/ontologyTerm"
+    },
+    {
+      "$ref": "#/$defs/assertionEnvelope"
+    },
+    {
+      "$ref": "#/$defs/identityEnvelope"
+    }
+  ],
+  "$defs": {
+    "common": {
+      "type": "object",
+      "required": [
+        "@context",
+        "@id",
+        "@type"
+      ],
+      "properties": {
+        "@context": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "object"
+                ]
+              },
+              "minItems": 1
+            },
+            {
+              "type": "object"
+            }
+          ]
+        },
+        "@id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "@type": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            }
+          ]
+        },
+        "openontology_version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[A-Za-z0-9.-]+)?$"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": true
+    },
+    "sourceArtifact": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/common"
+        },
+        {
+          "type": "object",
+          "required": [
+            "oo.source.system",
+            "oo.source.artifact.type",
+            "oo.source.artifact.name",
+            "oo.source.artifact.path"
+          ],
+          "properties": {
+            "@type": {
+              "const": "oo:SourceArtifact"
+            },
+            "oo.source.system": {
+              "type": "string",
+              "minLength": 1
+            },
+            "oo.source.artifact.type": {
+              "type": "string",
+              "enum": [
+                "database",
+                "schema",
+                "table",
+                "column",
+                "api",
+                "api_object",
+                "endpoint",
+                "field",
+                "event_stream",
+                "event_type",
+                "event_attribute",
+                "file",
+                "document",
+                "metric",
+                "dashboard",
+                "code_symbol",
+                "lineage_dataset",
+                "lineage_job",
+                "lineage_run"
+              ]
+            },
+            "oo.source.artifact.name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "oo.source.artifact.path": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "ontologyTerm": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/common"
+        },
+        {
+          "type": "object",
+          "required": [
+            "oo.term.kind",
+            "oo.term.label",
+            "oo.term.definition",
+            "oo.term.status"
+          ],
+          "properties": {
+            "@type": {
+              "const": "oo:OntologyTerm"
+            },
+            "oo.term.kind": {
+              "type": "string",
+              "enum": [
+                "class",
+                "property",
+                "relationship",
+                "event",
+                "observation",
+                "role",
+                "trait",
+                "interface",
+                "constraint_profile",
+                "policy",
+                "unit",
+                "enumeration",
+                "enumeration_value"
+              ]
+            },
+            "oo.term.label": {
+              "type": "string",
+              "minLength": 1
+            },
+            "oo.term.definition": {
+              "type": "string",
+              "minLength": 1
+            },
+            "oo.term.status": {
+              "$ref": "#/$defs/lifecycleStatus"
+            }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "assertionEnvelope": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/common"
+        },
+        {
+          "type": "object",
+          "required": [
+            "openontology_version",
+            "assertion"
+          ],
+          "properties": {
+            "@type": {
+              "enum": [
+                "oo:SemanticAssertion",
+                "oo:MappingAssertion"
+              ]
+            },
+            "assertion": {
+              "$ref": "#/$defs/assertion"
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/evidence"
+              }
+            },
+            "provenance": {
+              "$ref": "#/$defs/provenance"
+            }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "identityEnvelope": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/common"
+        },
+        {
+          "type": "object",
+          "required": [
+            "openontology_version",
+            "identity"
+          ],
+          "properties": {
+            "@type": {
+              "const": "oo:IdentityAssertion"
+            },
+            "identity": {
+              "$ref": "#/$defs/identity"
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/evidence"
+              }
+            },
+            "provenance": {
+              "$ref": "#/$defs/provenance"
+            }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "assertion": {
+      "type": "object",
+      "required": [
+        "kind",
+        "status",
+        "subject"
+      ],
+      "properties": {
+        "kind": {
+          "$ref": "#/$defs/assertionKind"
+        },
+        "status": {
+          "$ref": "#/$defs/assertionStatus"
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1
+        },
+        "object": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "unknown_state": {
+          "$ref": "#/$defs/unknownState"
+        }
+      },
+      "additionalProperties": true
+    },
+    "identity": {
+      "type": "object",
+      "required": [
+        "kind",
+        "subject",
+        "object",
+        "method"
+      ],
+      "properties": {
+        "kind": {
+          "$ref": "#/$defs/identityKind"
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1
+        },
+        "object": {
+          "type": "string",
+          "minLength": 1
+        },
+        "method": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        }
+      },
+      "additionalProperties": true
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": {
+        "type": [
+          "string",
+          "number",
+          "integer",
+          "boolean",
+          "array",
+          "object",
+          "null"
+        ]
+      }
+    },
+    "confidence": {
+      "type": "object",
+      "required": [
+        "score",
+        "method"
+      ],
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "method": {
+          "type": "string",
+          "minLength": 1
+        },
+        "calibrated": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "kind",
+        "summary",
+        "produced_by"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "produced_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "produced_by": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence_contribution": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "activity",
+        "generated_at",
+        "generated_by"
+      ],
+      "properties": {
+        "activity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "generated_by": {
+          "type": "string",
+          "minLength": 1
+        },
+        "used": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "input_artifacts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "assertionKind": {
+      "type": "string",
+      "enum": [
+        "maps_to",
+        "exact_match",
+        "broad_match",
+        "narrow_match",
+        "related_match",
+        "same_as",
+        "candidate_same_as",
+        "not_same_as",
+        "derived_from",
+        "transforms_to",
+        "transformed_from",
+        "source_of_truth_for",
+        "conflicts_with",
+        "constrains",
+        "observes",
+        "part_of",
+        "depends_on",
+        "deprecated_by",
+        "supersedes",
+        "aggregates",
+        "splits_into",
+        "composes_from",
+        "not_equivalent",
+        "unknown",
+        "unmapped"
+      ]
+    },
+    "identityKind": {
+      "type": "string",
+      "enum": [
+        "same_as",
+        "candidate_same_as",
+        "not_same_as",
+        "merged_into",
+        "split_from",
+        "canonical_for_scope",
+        "alias_of",
+        "identifier_for"
+      ]
+    },
+    "assertionStatus": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "under_review",
+        "accepted",
+        "rejected",
+        "disputed",
+        "deprecated",
+        "superseded"
+      ]
+    },
+    "lifecycleStatus": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "experimental",
+        "accepted",
+        "stable",
+        "deprecated",
+        "rejected",
+        "superseded",
+        "retired"
+      ]
+    },
+    "unknownState": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "unmapped",
+        "not_applicable",
+        "withheld",
+        "conflicted",
+        "not_observed",
+        "closed_world_false"
+      ]
+    }
+  }
+}
