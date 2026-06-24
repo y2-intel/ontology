@@ -5,6 +5,16 @@ description: Use this skill as the shared workflow contract for ontology design,
 
 This interface defines the reusable contract for data-engineering skills that improve ontologies. Treat an ontology as a production data product: real-world entities, stable identities, meaningful links, curated properties, clear source precedence, and operational actions.
 
+## OpenOntology alignment
+
+When the user requests OpenOntology-compatible output, align results to the standard object model:
+
+- Source systems, tables, API fields, events, dashboards, documents, metrics, and code symbols become SourceArtifact records before they become curated terms.
+- Domain entities, properties, events, observations, relationships, interfaces, and actions become OntologyTerm records.
+- Source-to-term links become MappingAssertion records with evidence, provenance, confidence method, and unknown states when relevant.
+- Cross-system identity work becomes IdentityAssertion records with explicit candidate, accepted, rejected, split, merged, alias, or canonical-for-scope states.
+- Source precedence, denormalization, extension, security, and constraint choices become SemanticDecision records.
+
 ## Required workflow
 
 Any skill implementing this interface must:

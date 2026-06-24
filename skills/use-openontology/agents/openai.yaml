@@ -1,0 +1,4 @@
+interface:
+  display_name: "Use OpenOntology"
+  short_description: "Map, extend, and use OpenOntology artifacts."
+  default_prompt: "Use this when mapping source schemas, fields, records, or ontology terms into OpenOntology 0.0.1 assertions, examples, identity links, source artifacts, or compatible extensions."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenOntology Standard"
+  short_description: "Draft, review, and extend OpenOntology standard artifacts."
+  default_prompt: "Use this when drafting or reviewing OpenOntology RFCs, semantic conventions, conformance levels, JSON-LD contexts, schemas, examples, and agent workflow contracts."
